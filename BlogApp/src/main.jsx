@@ -17,6 +17,7 @@ import EditPost from "./pages/EditPost";
 import Post from "./pages/post";
 
 import AllPosts from "./pages/AllPosts";
+import MyPosts from "./pages/MyPosts";
 
 const router = createBrowserRouter([
   {
@@ -73,6 +74,15 @@ const router = createBrowserRouter([
         {
             path: "/post/:slug",
             element: <Post />,
+        },
+        {
+            path: "/My-posts",
+            element: (
+                <AuthLayout authentication>
+                    {" "}
+                    <MyPosts/>
+                </AuthLayout>
+            ),
         },
     ],
 },

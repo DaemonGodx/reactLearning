@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { Container, PostCard } from '../components';
 import appwriteService from '../appwrite/db_config';
-import userService from '../appwrite/auth';
-
-function AllPosts() {
+import { useSelector } from 'react-redux';
+import { Query } from "appwrite"; 
+function MyPosts() {
     const [posts, setPosts] = useState([]);
+    const userData = useSelector(state => state.auth.userData);
 
     useEffect(() => {
-        
-        appwriteService.getPosts([]).then((res) => {
-            if (res && res.rows) {
-                setPosts(res.rows);
-            }
-        }).catch((err) => {
-            console.error("Error fetching posts:", err);
+        if (!userData) return;
+
+        const queries = [
+            Query.equal("UserId", userData.$id),
+            Query.equal("status", "active")
+        ];
+
+        appwriteService.getPosts(queries).then((res) => {
+            if (res) setPosts(res.rows);
         });
-    }, []); 
+    }, [userData]);
 
     return (
         <div className='w-full py-8'>
@@ -32,4 +35,4 @@ function AllPosts() {
     );
 }
 
-export default AllPosts;
+export default MyPosts;
